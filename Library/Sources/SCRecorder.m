@@ -7,6 +7,7 @@
 //
 
 #import "SCRecorder.h"
+@import ImageIO;
 #define dispatch_handler(x) if (x != nil) dispatch_async(dispatch_get_main_queue(), x)
 #define SCRecorderFocusContext ((void*)0x1)
 
@@ -92,6 +93,9 @@
 }
 
 - (void)deviceOrientationChanged:(id)sender {
+    
+    [_delegate recorder:self deviceOrientationChanged:[[UIDevice currentDevice] orientation]];
+    
     if (_autoSetVideoOrientation) {
         dispatch_sync(_recordSessionQueue, ^{
             [self updateVideoOrientation];
@@ -271,7 +275,7 @@
     return [self _imageFromSampleBufferHolder:_lastAppendedVideoBuffer];
 }
 
-- (void)capturePhoto:(void(^)(NSError*, UIImage*))completionHandler {
+- (void)capturePhoto:(void(^)(NSError* error, NSData* data, NSDictionary* metadata))completionHandler {
     AVCaptureConnection *connection = [_photoOutput connectionWithMediaType:AVMediaTypeVideo];
     if (connection != nil) {
         [_photoOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:
@@ -280,24 +284,26 @@
              if (imageDataSampleBuffer != nil && error == nil) {
                  NSData *jpegData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                  if (jpegData) {
-                     UIImage *image = [UIImage imageWithData:jpegData];
+                     CGImageSourceRef  source = CGImageSourceCreateWithData((__bridge CFDataRef)jpegData, NULL);
+                     //既存のメタデータを取得
+                     NSDictionary *metadata = (__bridge NSDictionary *) CGImageSourceCopyPropertiesAtIndex(source,0,NULL);
                      if (completionHandler != nil) {
-                         completionHandler(nil, image);
+                         completionHandler(nil, jpegData, metadata);
                      }
                  } else {
                      if (completionHandler != nil) {
-                         completionHandler([SCRecorder createError:@"Failed to create jpeg data"], nil);
+                         completionHandler([SCRecorder createError:@"Failed to create jpeg data"], nil, nil);
                      }
                  }
              } else {
                  if (completionHandler != nil) {
-                     completionHandler(error, nil);
+                     completionHandler(error, nil, nil);
                  }
              }
          }];
     } else {
         if (completionHandler != nil) {
-            completionHandler([SCRecorder createError:@"Camera session not started or Photo disabled"], nil);
+            completionHandler([SCRecorder createError:@"Camera session not started or Photo disabled"], nil, nil);
         }
     }
 }

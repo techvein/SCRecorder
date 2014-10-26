@@ -29,8 +29,6 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
 
 @protocol SCRecorderDelegate <NSObject>
 
-@optional
-
 // Camera stuffs
 - (void)recorder:(SCRecorder *)recorder didReconfigureVideoInput:(NSError *)videoInputError;
 - (void)recorder:(SCRecorder *)recorder didReconfigureAudioInput:(NSError *)audioInputError;
@@ -50,6 +48,9 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
 - (void)recorder:(SCRecorder *)recorder didSkipAudioSampleBuffer:(SCRecordSession *)recordSession;
 - (void)recorder:(SCRecorder *)recorder didSkipVideoSampleBuffer:(SCRecordSession *)recordSession;
 - (void)recorder:(SCRecorder *)recorder didCompleteRecordSession:(SCRecordSession *)recordSession;
+
+// Orientation
+- (void)recorder:(SCRecorder *)recorder deviceOrientationChanged:(UIDeviceOrientation)orientation;
 
 @end
 
@@ -313,7 +314,7 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
  Capture a photo from the camera
  @param completionHandler called on the main queue with the image taken or an error in case of a problem
  */
-- (void)capturePhoto:(void(^)(NSError *error, UIImage *image))completionHandler;
+- (void)capturePhoto:(void(^)(NSError* error, NSData* data, NSDictionary* metadata))completionHandler;
 
 /**
  Signal to the recorder that the previewView frame has changed.
