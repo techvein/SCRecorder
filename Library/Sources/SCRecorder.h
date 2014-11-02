@@ -155,7 +155,7 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
  The video orientation. This is automatically set if autoSetVideoOrientation is enabled
  */
 @property (assign, nonatomic) AVCaptureVideoOrientation videoOrientation;
-
+- (void)updateVideoOrientation;
 /**
  If true, the videoOrientation property will be set automatically
  depending on the current device orientation

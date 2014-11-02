@@ -118,7 +118,7 @@
             videoConnection.videoOrientation = videoOrientation;
         }
         if ([_previewLayer.connection isVideoOrientationSupported]) {
-            _previewLayer.connection.videoOrientation = videoOrientation;
+            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
         }
         
         AVCaptureConnection *photoConnection = [_photoOutput connectionWithMediaType:AVMediaTypeVideo];
