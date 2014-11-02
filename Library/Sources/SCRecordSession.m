@@ -356,7 +356,16 @@ const NSString *SCRecordSessionDateKey = @"Date";
 }
 
 - (void)saveToCameraRoll {
-    UISaveVideoAtPathToSavedPhotosAlbum(self.outputUrl.path, nil, nil, nil);
+    NSString* path = self.outputUrl.path;
+    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path)) {
+        UISaveVideoAtPathToSavedPhotosAlbum(path, self, @selector(video:didFinishSavingWithError: contextInfo:), nil);
+    } else {
+        assert(false);
+    }
+}
+
+-(void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
+    NSLog(@"Finished with error: %@", error);
 }
 
 - (void)recomputeRecordDuration {
