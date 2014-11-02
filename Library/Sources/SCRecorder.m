@@ -201,7 +201,6 @@
     if (_photoEnabled) {
         if (_photoOutput == nil) {
             _photoOutput = [[AVCaptureStillImageOutput alloc] init];
-            _photoOutput.automaticallyEnablesStillImageStabilizationWhenAvailable = YES;
             _photoOutput.outputSettings = @{AVVideoCodecKey : AVVideoCodecJPEG};
         }
         
@@ -209,6 +208,9 @@
             [session addOutput:_photoOutput];
         } else {
             photoError = [SCRecorder createError:@"Cannot add photoOutput inside the session"];
+        }
+        if (_photoOutput.stillImageStabilizationSupported) {
+            _photoOutput.automaticallyEnablesStillImageStabilizationWhenAvailable = YES;
         }
     }
     
