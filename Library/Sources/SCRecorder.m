@@ -201,6 +201,7 @@
     if (_photoEnabled) {
         if (_photoOutput == nil) {
             _photoOutput = [[AVCaptureStillImageOutput alloc] init];
+            _photoOutput.automaticallyEnablesStillImageStabilizationWhenAvailable = YES;
             _photoOutput.outputSettings = @{AVVideoCodecKey : AVVideoCodecJPEG};
         }
         
