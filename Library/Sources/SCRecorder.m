@@ -44,7 +44,7 @@
         _recordSessionQueue = dispatch_queue_create("me.corsin.SCRecorder.RecordSession", nil);
         
         _previewLayer = [[AVCaptureVideoPreviewLayer alloc] init];
-        _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        _previewLayer.videoGravity = AVLayerVideoGravityResizeAspect;
         _initializeRecordSessionLazily = YES;
         
         _videoOrientation = AVCaptureVideoOrientationPortrait;
