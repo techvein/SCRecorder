@@ -52,10 +52,25 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
 // Orientation
 - (void)recorder:(SCRecorder *)recorder deviceOrientationChanged:(UIDeviceOrientation)orientation;
 
+
+//takePhotoSilently
+@optional
+- (void)takePhotoSilently:(NSData *)data withMetaData:(NSDictionary*)metadata;
+
+
 @end
 
 
 @interface SCRecorder : NSObject<AVCaptureAudioDataOutputSampleBufferDelegate, AVCaptureVideoDataOutputSampleBufferDelegate>
+
+
+/**
+ Flag to take a photo silently
+ Require a Photo from SampleBuffer
+ from Video capture
+ */
+@property (assign, nonatomic) BOOL isRequireTakePhoto;
+
 
 /**
  Enable the audio

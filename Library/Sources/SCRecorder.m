@@ -420,6 +420,32 @@
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+ 
+    if(_isRequireTakePhoto){
+        NSDictionary *metadata;
+        CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        CIImage *ciimage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+        CIContext *context = [CIContext contextWithOptions:nil];
+        CGImageRef cgimage = \
+        [context createCGImage:ciimage
+                      fromRect:CGRectMake(0, 0,
+                                          CVPixelBufferGetWidth(pixelBuffer),
+                                          CVPixelBufferGetHeight(pixelBuffer))];
+        
+        NSData *jpegData = UIImageJPEGRepresentation([UIImage imageWithCGImage:cgimage], 1.0);
+        
+        if (jpegData) {
+            CGImageSourceRef  source = CGImageSourceCreateWithData((__bridge CFDataRef)jpegData, NULL);
+            //既存のメタデータを取得
+            metadata = (__bridge NSDictionary *) CGImageSourceCopyPropertiesAtIndex(source,0,NULL);
+            id<SCRecorderDelegate> delegate = self.delegate;
+            if ([delegate respondsToSelector:@selector(takePhotoSilently:withMetaData:)]) {
+                _isRequireTakePhoto = NO;
+                [delegate takePhotoSilently:jpegData withMetaData:metadata];
+            }
+         }
+    }
+    
     if (captureOutput == _videoOutput) {
         _lastVideoBuffer.sampleBuffer = sampleBuffer;
         id<CIImageRenderer> imageRenderer = _CIImageRenderer;
