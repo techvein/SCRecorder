@@ -424,24 +424,27 @@
     if(_isRequireTakePhoto){
         NSDictionary *metadata;
         CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-        CIImage *ciimage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
-        CIContext *context = [CIContext contextWithOptions:nil];
-        CGImageRef cgimage = \
-        [context createCGImage:ciimage
-                      fromRect:CGRectMake(0, 0,
-                                          CVPixelBufferGetWidth(pixelBuffer),
-                                          CVPixelBufferGetHeight(pixelBuffer))];
-        
-        NSData *jpegData = UIImageJPEGRepresentation([UIImage imageWithCGImage:cgimage], 1.0);
-        
-        if (jpegData) {
-            CGImageSourceRef  source = CGImageSourceCreateWithData((__bridge CFDataRef)jpegData, NULL);
-            //既存のメタデータを取得
-            metadata = (__bridge NSDictionary *) CGImageSourceCopyPropertiesAtIndex(source,0,NULL);
-            id<SCRecorderDelegate> delegate = self.delegate;
-            if ([delegate respondsToSelector:@selector(takePhotoSilently:withMetaData:)]) {
+        if (pixelBuffer) {
+            
+            CIImage *ciimage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+            CIContext *context = [CIContext contextWithOptions:nil];
+            CGImageRef cgimage = \
+            [context createCGImage:ciimage
+                          fromRect:CGRectMake(0, 0,
+                                              CVPixelBufferGetWidth(pixelBuffer),
+                                              CVPixelBufferGetHeight(pixelBuffer))];
+            
+            NSData *jpegData = UIImageJPEGRepresentation([UIImage imageWithCGImage:cgimage], 1.0);
+            
+            if (jpegData) {
                 _isRequireTakePhoto = NO;
-                [delegate takePhotoSilently:jpegData withMetaData:metadata];
+                CGImageSourceRef  source = CGImageSourceCreateWithData((__bridge CFDataRef)jpegData, NULL);
+                //既存のメタデータを取得
+                metadata = (__bridge NSDictionary *) CGImageSourceCopyPropertiesAtIndex(source,0,NULL);
+                id<SCRecorderDelegate> delegate = self.delegate;
+                if ([delegate respondsToSelector:@selector(takePhotoSilently:withMetaData:)]) {
+                    [delegate takePhotoSilently:jpegData withMetaData:metadata];
+                }
             }
          }
     }
