@@ -423,6 +423,7 @@
  
     if(_isRequireTakePhoto){
         NSDictionary *metadata;
+        //参考:http://qiita.com/hkato193/items/c0327e4c56ccf1c15e7d
         CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
         if (pixelBuffer) {
             
