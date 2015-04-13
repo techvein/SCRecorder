@@ -11,7 +11,7 @@
 
 #define kRecordSessionDefaultVideoCodec AVVideoCodecH264
 #define kRecordSessionDefaultVideoScalingMode AVVideoScalingModeResizeAspectFill
-#define kRecordSessionDefaultOutputBitPerPixel 12
+#define kRecordSessionDefaultOutputBitPerPixel 4.8
 #define kRecordSessionDefaultAudioBitrate 128000
 #define kRecordSessionDefaultAudioFormat kAudioFormatMPEG4AAC
 
