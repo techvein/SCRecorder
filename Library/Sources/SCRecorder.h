@@ -218,6 +218,8 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
 
 /**
  The zoom factor applied to the video.
+ add it from This URl below
+ https://github.com/rFlex/SCRecorder/blob/bceeebc70e0580e06fd3cf5ee22f665048a4c594/Library/Sources/SCRecorder.m
  */
 @property (assign, nonatomic) CGFloat videoZoomFactor;
 
@@ -355,6 +357,8 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
 
 /**
  Set the current video zoom scale
+ add it from This URl below
+ https://github.com/rFlex/SCRecorder/blob/bceeebc70e0580e06fd3cf5ee22f665048a4c594/Library/Sources/SCRecorder.m
  */
 - (void)setVideoZoomFactor:(CGFloat)videoZoomFactor;
 
