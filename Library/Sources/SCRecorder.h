@@ -217,6 +217,11 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
 @property (readonly, nonatomic) dispatch_queue_t recordSessionQueue;
 
 /**
+ The zoom factor applied to the video.
+ */
+@property (assign, nonatomic) CGFloat videoZoomFactor;
+
+/**
  Create a recorder
  @return the newly created recorder
  */
@@ -346,5 +351,11 @@ typedef NS_ENUM(NSInteger, SCFlashMode) {
  Get an image representing the last appended video buffer
  */
 - (UIImage *)snapshotOfLastAppendedVideoBuffer;
+
+
+/**
+ Set the current video zoom scale
+ */
+- (void)setVideoZoomFactor:(CGFloat)videoZoomFactor;
 
 @end

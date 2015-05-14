@@ -1174,4 +1174,36 @@
     return _photoOutput;
 }
 
+#pragma mark - ZOOM
+
+- (void)setVideoZoomFactor:(CGFloat)videoZoomFactor {
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    if ([device respondsToSelector:@selector(videoZoomFactor)]) {
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            if (videoZoomFactor <= device.activeFormat.videoMaxZoomFactor) {
+                device.videoZoomFactor = videoZoomFactor;
+            } else {
+                NSLog(@"Unable to set videoZoom: (max %f, asked %f)", device.activeFormat.videoMaxZoomFactor, videoZoomFactor);
+            }
+            
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"Unable to set videoZoom: %@", error.localizedDescription);
+        }
+    }
+}
+
+
+- (CGFloat)videoZoomFactor {
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    if ([device respondsToSelector:@selector(videoZoomFactor)]) {
+        return device.videoZoomFactor;
+    }
+    
+    return 1;
+}
+
 @end
